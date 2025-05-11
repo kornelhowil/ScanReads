@@ -12,19 +12,18 @@ def get_image(url) -> Image.Image:
     return Image.open(requests.get(url, stream=True).raw)
 
 
-def read_image(image: Image.Image):
+def read_image(image: Image.Image, gemini_api_key: str) -> tuple:
     """
     Read the image and return the title, author, publisher, and recommendations.
     """
-    reader = Reader("api_key")
-    response = reader(image)
-    author = response["author"]
-    title = response["title"]
-    publisher = response["publisher"]
-    images = [get_image(rec['image']) for rec in response["recommendations"]]
-    authors = [rec['author'] for rec in response["recommendations"]]
-    titles = [rec['title'] for rec in response["recommendations"]]
-    return title, author, publisher, *images, *titles, *authors
+    reader = Reader(gemini_api_key)
+    r = reader(image)
+    book_info = [r["title"], r["author"], r["publisher"],
+                 r["about_book"], r["about_author"]]
+    images = [get_image(rec['image']) for rec in r["recommendations"]]
+    authors = [rec['author'] for rec in r["recommendations"]]
+    titles = [rec['title'] for rec in r["recommendations"]]
+    return *book_info, *images, *titles, *authors
 
 
 def main():
@@ -37,22 +36,24 @@ def main():
                 with gr.Column():
                     input_image = gr.Image(
                         type='pil', label="Input Image", height=300)
+                    gemini_api_key = gr.Textbox(
+                        label="Gemini API Key", type="password")
                     submit_btn = gr.Button("Submit")
                 with gr.Column():
-                    title = gr.Textbox(
-                        label="Book Title")
-                    author = gr.Textbox(
-                        label="Author")
-                    publisher = gr.Textbox(
-                        label="Publisher")
+                    book_info = []
+                    book_info.append(gr.Textbox(label="Book Title"))
+                    book_info.append(gr.Textbox(label="Author"))
+                    book_info.append(gr.Textbox(label="Publisher"))
+                    book_info.append(gr.Textbox(label="About Book"))
+                    book_info.append(gr.Textbox(label="About Author"))
             with gr.Row():
                 gr.HTML("<h1><center>Book recommendations</center></h1>")
             with gr.Row():
                 images = []
                 titles = []
                 authors = []
-                for i in range(5):
-                    with gr.Column():
+                for i in range(3):
+                    with gr.Column("70%"):
                         gr.HTML(f"<center>Top {i+1}</center>")
                         images.append(
                             gr.Image(label=f"Book cover", height=200))
@@ -63,8 +64,8 @@ def main():
 
         submit_btn.click(
             fn=read_image,
-            inputs=[input_image],
-            outputs=[title, author, publisher, *images, *titles, *authors],
+            inputs=[input_image, gemini_api_key],
+            outputs=[*book_info, *images, *titles, *authors],
         )
     block.queue(max_size=1).launch(show_api=False)
 

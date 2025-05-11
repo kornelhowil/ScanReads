@@ -17,6 +17,8 @@ class Reader():
             "title": "1984",
             "author": "George Orwell",
             "publisher": "Secker & Warburg",
+            "about_book": "A dystopian social science fiction novel and cautionary tale, warning of the dangers of totalitarianism and extreme political ideology.",
+            "about_author": "George Orwell was an English novelist, essayist, journalist, and critic. He is best known for his novels 'Animal Farm' and '1984'.",
             "recommendations": [
                 {
                     "title": "Brave New World",
@@ -34,18 +36,6 @@ class Reader():
                     "title": "The Handmaid's Tale",
                     "author": "Margaret Atwood",
                     "publisher": "McClelland & Stewart",
-                    "image": "https://covers.openlibrary.org/b/id/14845126-M.jpg",
-                },
-                {
-                    "title": "The Giver",
-                    "author": "Lois Lowry",
-                    "publisher": "Houghton Mifflin Harcourt",
-                    "image": "https://covers.openlibrary.org/b/id/14845126-M.jpg",
-                },
-                {
-                    "title": "The Road",
-                    "author": "Cormac McCarthy",
-                    "publisher": "Alfred A. Knopf",
                     "image": "https://covers.openlibrary.org/b/id/14845126-M.jpg",
                 }
             ]
