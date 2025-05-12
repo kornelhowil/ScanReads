@@ -1,5 +1,5 @@
 from PIL import Image
-from scanreads import GeminiOCR, Reader, BookParamGetter
+from scanreads import GeminiOCR, Reader, BookParamGetter, RecommendationGenerator
 
 class ScanreadsReader(Reader):
     """
@@ -20,6 +20,10 @@ class ScanreadsReader(Reader):
             api_key=gemini_api_key
         )
 
+        self.recommendation_generator = RecommendationGenerator(
+            api_key=gemini_api_key
+        )
+
     def __call__(self, image: Image.Image) -> dict:
         book_data = self.gemini_ocr(image)
         book_params = self.book_param_getter.get_book_params(
@@ -33,25 +37,34 @@ class ScanreadsReader(Reader):
             "publisher": book_data.publisher,
             "about_book": book_params.description,
             "about_author": book_params.author_description,
-            "recommendations": [
-                {
-                    "title": "Brave New World",
-                    "author": "Aldous Huxley",
-                    "publisher": "Chatto & Windus",
-                    "image": "https://covers.openlibrary.org/b/id/14845126-M.jpg",
-                },
-                {
-                    "title": "Fahrenheit 451",
-                    "author": "Ray Bradbury",
-                    "publisher": "Ballantine Books",
-                    "image": "https://covers.openlibrary.org/b/id/14845126-M.jpg",
-                },
-                {
-                    "title": "The Handmaid's Tale",
-                    "author": "Margaret Atwood",
-                    "publisher": "McClelland & Stewart",
-                    "image": "https://covers.openlibrary.org/b/id/14845126-M.jpg",
-                }
-            ]
+            "page_count": book_params.page_count,
         }
+        
+        recommendations = self.recommendation_generator.generate_recommendations(
+            book_data.title,
+            book_data.author
+        )
+        
+        response["recommendations"] = []
+        
+        for recommendation in recommendations[:3]:
+            print("R2", recommendation.title)
+            print("R3", recommendation.author)
+            
+            params = self.book_param_getter.get_book_params(
+                recommendation.title,
+                recommendation.author,
+                full=False
+            )
+            
+            print("R4", params.cover_url, type(params.cover_url))
+
+            
+            response["recommendations"].append({
+                "title": recommendation.title,
+                "author": recommendation.author,
+                "publisher": "Unknown",
+                "image": params.cover_url,
+            })
+        
         return response
