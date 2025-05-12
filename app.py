@@ -2,7 +2,7 @@
 import gradio as gr
 from PIL import Image
 import requests
-from scanreads.reader import Reader
+from scanreads import ScanreadsReader
 
 
 def get_image(url) -> Image.Image:
@@ -16,7 +16,7 @@ def read_image(image: Image.Image, gemini_api_key: str) -> tuple:
     """
     Read the image and return the title, author, publisher, and recommendations.
     """
-    reader = Reader(gemini_api_key)
+    reader = ScanreadsReader(gemini_api_key)
     r = reader(image)
     book_info = [r["title"], r["author"], r["publisher"],
                  r["about_book"], r["about_author"]]
