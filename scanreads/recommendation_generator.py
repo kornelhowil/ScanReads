@@ -26,7 +26,11 @@ class RecommendationGenerator:
         
         text = response.text
         
-        text = text.split("|")[-1]
+        try:
+            text = text.split("|")[-1]
+        except IndexError:
+            return [] 
+        
         recommendations = text.split("#")
         
         recommendations = [r.strip() for r in recommendations]
