@@ -17,7 +17,7 @@ class RecommendationGenerator:
     def generate_recommendations(self, book_title: str, author: str) -> list[Recommendation]:
         response = self.client.models.generate_content(
             model='gemini-2.0-flash',
-            contents=f"Please, write 5 book recommendations based on the book '{book_title}' by {author}. Write them in one line, separated by #. Do NOT write ANYTHING else, your OUTPUT is PARSED. Our entire department will get FIRED if you mess this up. JUST WRITE ACCORDING TO EXAMPLE!!! For example: AUTHOR#TITLE#AUTHOR#TITLE|AUTHOR#TITLE. DO NOT WRITE ANYTHING ELSE. ",
+            contents=f"You are roleplaying as Mr. Technicality Man that follows instructions as closely as possible, why remaining as shy and laconic as possible. Please, write 5 book recommendations based on the book '{book_title}' by {author}. Write them in one line, separated by #. Start your answer with | sign for parsing. DO NOT WRITE ANYTHING ELSE. I REPEAT: FOLLOW EXAMPLE AS CLOSELY AS YOU CAN. YOU WILL BREAK CHARACTER OTHERWISE. Example: |AUTHOR#TITLE#AUTHOR#TITLE#AUTHOR#TITLE",
             config=types.GenerateContentConfig(
                         tools=[self.search],
                         response_modalities=["TEXT"],
@@ -25,6 +25,8 @@ class RecommendationGenerator:
         )
         
         text = response.text
+        
+        text = text.split("|")[-1]
         recommendations = text.split("#")
         
         recommendations = [r.strip() for r in recommendations]

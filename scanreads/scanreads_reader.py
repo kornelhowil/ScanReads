@@ -48,7 +48,7 @@ class ScanreadsReader(Reader):
 
         response["recommendations"] = []
 
-        for recommendation in recommendations[:3]:
+        for recommendation in recommendations:
             print("R2", recommendation.title)
             print("R3", recommendation.author)
 
@@ -66,5 +66,22 @@ class ScanreadsReader(Reader):
                 "publisher": "Unknown",
                 "image": params.cover_url,
             })
+        
+        # More niche books (or made up ones) won't have cover_url
+        # as such, we sort them to the end of the list and limit up to 3
+        # recommendations.
+        
+        response["recommendations"] = sorted(
+            response["recommendations"],
+            key=lambda x: x["image"] is not None,
+            reverse=True
+        )
+        
+        if len(response["recommendations"]) > 3:
+            # Limit to 3 recommendations
+            response["recommendations"] = response["recommendations"][:3]
+        elif len(response["recommendations"]) < 3:
+            # Fill with None if less than 3 recommendations
+            response["recommendations"] += [{"title": None, "author": None, "publisher": "Unknown", "image": None}] * (3 - len(response["recommendations"]))      
 
         return response
