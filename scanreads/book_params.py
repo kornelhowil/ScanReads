@@ -49,7 +49,7 @@ class BookParamGetter:
 
             author_description = self.client.models.generate_content(
                 model='gemini-2.5-flash-preview-04-17',
-                contents=f"Write a short description of the author {author}. I have no idea about him/her, but I know that he wrote {book_title}. Do your best to sum it up. If you don't know say 'He/She is a person (probably).'. In that case do not add anything else. Keep it under 50 words.",
+                contents=f"Write a short description of the author {author}. I have no idea about him/her, but I know that he wrote {book_title}. Write speculations available to you due to your search (but note that you are not sure in case of ambiguity). Do not write only that he wrote the book, we know that. Do your best to sum it up. If you don't know say 'He/She is a person (probably).'. In that case do not add anything else. Keep it under 100 words.",
                 config=types.GenerateContentConfig(
                         tools=[self.search],
                         response_modalities=["TEXT"],
