@@ -9,6 +9,8 @@ def get_image(url) -> Image.Image:
     """
     Convert the URL to an Image.
     """
+    if url is None:
+        url = "https://image.similarpng.com/file/similarpng/original-picture/2020/09/Cartoon-disney-Mickey-mouse-on-transparent-background-PNG.png"
     return Image.open(requests.get(url, stream=True).raw)
 
 

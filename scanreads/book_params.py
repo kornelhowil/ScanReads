@@ -1,8 +1,7 @@
-import json 
+import json
 
 from google import genai
 from google.genai import types
-
 from google_books_api_wrapper.api import GoogleBooksAPI
 
 
@@ -12,6 +11,7 @@ class BookParams:
         self.description = description
         self.author_description = author_description
         self.cover_url = cover_url
+
 
 class BookParamGetter:
     def __init__(self, api_key: str):
@@ -24,26 +24,22 @@ class BookParamGetter:
     def get_book_params(self, book_title: str, author: str, full=True) -> BookParams:
         book = self.api.search_book(book_title, author=author).get_best_match()
         img_url = book.large_thumbnail
-        
+
         description = book.description
-        author_description = None 
-        
+        author_description = None
+
         if full:
-            if description is None or len(description) < 10: 
-                response = self.client.models.generate_content(
+            if description is None or len(description) < 10:
+                description = self.client.models.generate_content(
                     model='gemini-2.0-flash',
-                    contents=f"Write a short description of the book '{book_title}' by {author}. I have no idea about it. Do your best to sum it up.",
-                    #config=types.GenerateContentConfig(
-                    #    tools=[self.search]
-                )
-                
-                description = response.text
-                
+                    contents=f"Write a short description of the book '{book_title}' by {author}. I have no idea about it. Do your best to sum it up. Make sure to sound like you are certain. Do not use words like 'probably' or 'likely'. Keep it under 50 words.",
+                ).text
+
             author_description = self.client.models.generate_content(
                 model='gemini-2.0-flash',
-                contents=f"Write a short description of the author {author}. I have no idea about him/her. Do your best to sum it up.",
-            ).text 
-        
+                contents=f"Write a short description of the author {author}. I have no idea about him/her. Do your best to sum it up. If you don't know say 'He/She is a person (probably).'. In that case do not add anything else. Keep it under 50 words.",
+            ).text
+
         return BookParams(
             page_count=book.page_count,
             description=description,
