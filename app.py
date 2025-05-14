@@ -20,7 +20,8 @@ def read_image(image: Image.Image, gemini_api_key: str) -> tuple:
     """
     reader = ScanreadsReader(gemini_api_key)
     r = reader(image)
-    book_info = [r["title"], r["author"], r["publisher"],
+    print(r)
+    book_info = [r["title"], r["author"], r["publisher"], r["page_count"],
                  r["about_book"], r["about_author"]]
     images = [get_image(rec['image']) for rec in r["recommendations"]]
     authors = [rec['author'] for rec in r["recommendations"]]
@@ -46,6 +47,7 @@ def main():
                     book_info.append(gr.Textbox(label="Book Title"))
                     book_info.append(gr.Textbox(label="Author"))
                     book_info.append(gr.Textbox(label="Publisher"))
+                    book_info.append(gr.Textbox(label="Page Count"))
                     book_info.append(gr.Textbox(label="About Book"))
                     book_info.append(gr.Textbox(label="About Author"))
             with gr.Row():
