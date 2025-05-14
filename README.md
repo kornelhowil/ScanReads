@@ -9,28 +9,28 @@ Kornel Howil*, Dominik Matuszek*
 </div>
 
 ### What is this project about?
-The main purpose of this project is to build an app that takes an image of a book cover and
-1. Automatically reads the title, author and publisher
+The main goal of this project is to build an app that takes an image of a book cover and:
+1. Automatically reads the title, author, and publisher  
 2. Recommends similar books
 
 
 ### Quick Start
 1. Clone this repository (you know how to do this)
-2. Install required packages
+2. Install the required packages
 ```bash
 pip install -r requirements.txt
 ```
 3. Generate [Gemini API key](https://aistudio.google.com/apikey)
-4. You're good to go
+4. You're good to go!
 ```bash
 python app.py
 ```
 
 ### Content of this repository
-- <span>app.py<span> - gradio app
-- example/1984.jpg - very random book cover
-- requirements.txt - requirements
-- scanreads - backend of the application
+- <span>app.py<span> - Gradio app
+- example/1984.jpg - A sample book cover
+- requirements.txt - Python dependencies
+- scanreads - Backend of the application
 
 
 
