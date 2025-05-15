@@ -4,6 +4,7 @@
 Kornel Howil*, Dominik Matuszek*
 
 (* denotes equal contribution)
+
 ![Python version](https://img.shields.io/badge/python-3.10+-important
 ) [![GitHub Repo stars](https://img.shields.io/github/stars/kornelhowil/ScanReads.svg?style=social&label=Star&maxAge=60)](https://github.com/kornelhowil/ScanReads)
 </div>
