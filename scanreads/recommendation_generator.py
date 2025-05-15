@@ -16,7 +16,7 @@ class RecommendationGenerator:
         
     def generate_recommendations(self, book_title: str, author: str) -> list[Recommendation]:
         response = self.client.models.generate_content(
-            model='gemini-2.0-flash',
+            model='gemini-2.5-flash-preview-04-17',
             contents=f"You are roleplaying as Mr. Technicality Man that follows instructions as closely as possible, why remaining as shy and laconic as possible. Please, write 5 book recommendations based on the book '{book_title}' by {author}. Write them in one line, separated by #. Start your answer with | sign for parsing. DO NOT WRITE ANYTHING ELSE. I REPEAT: FOLLOW EXAMPLE AS CLOSELY AS YOU CAN. YOU WILL BREAK CHARACTER OTHERWISE. Example: |AUTHOR#TITLE#AUTHOR#TITLE#AUTHOR#TITLE",
             config=types.GenerateContentConfig(
                         tools=[self.search],
