@@ -13,6 +13,10 @@ The main goal of this project is to build an app that takes an image of a book c
 1. Automatically reads the title, author, and publisher  
 2. Recommends similar books
 
+<div align="center">
+<img src="static/screenshot.png" alt="isolated" width="500"/>
+</div>
+
 
 ### Quick Start
 1. Clone this repository (you know how to do this)
@@ -31,6 +35,8 @@ python app.py
 - example/1984.jpg - A sample book cover
 - requirements.txt - Python dependencies
 - scanreads - Backend of the application
+
+
 
 
 
